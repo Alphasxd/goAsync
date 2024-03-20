@@ -10,11 +10,11 @@ import (
 // 关闭信号 channel: quitChan
 // 业务逻辑和关闭信号分开，是更好的设计
 type MsgServer struct {
-	msgChan  chan string
+	msgChan chan string
 	// quitChan 用于接收关闭信号，sruct{} 是空结构体，不占用内存
 	// 专门用于传递关闭信号，不需要传递任何数据，通常用于通知其他 goroutine 停止工作
 	// 这种方式的好处是不需要使用锁，因为 struct{}{} 是不可变的，不需要加锁
-	quitChan chan struct{} 
+	quitChan chan struct{}
 }
 
 // NewMsgServer 创建消息服务器
@@ -39,7 +39,7 @@ func (ms *MsgServer) handleMsg(msg string) {
 
 // work 工作，从消息通道中读取消息并处理，直到 quitChan 收到关闭信号
 func (ms *MsgServer) work() {
-// 标签，用于 break 跳出循环
+	// 标签，用于 break 跳出循环
 msgloop:
 	for {
 		// select 语句，用于同时处理多个通道，实现多路复用
@@ -63,7 +63,7 @@ func (ms *MsgServer) stop() {
 
 func main() {
 	ms := NewMsgServer()
-	go func ()  {
+	go func() {
 		// 1 秒后停止消息服务器，调用 stop 方法
 		time.Sleep(time.Second)
 		ms.stop()

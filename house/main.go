@@ -28,12 +28,13 @@ type Response struct {
 	err  error
 }
 
-const Owners = "Owners"
-const Price = "Price"
-const BankAccount = "BankAccount"
+const (
+	Owners      = "Owners"
+	Price       = "Price"
+	BankAccount = "BankAccount"
+)
 
 func sellHouseInfo(id int) (*HouseInfo, error) {
-
 	resChan := make(chan Response, 3)
 	wg := &sync.WaitGroup{}
 
@@ -78,18 +79,17 @@ func sellHouseInfo(id int) (*HouseInfo, error) {
 		return nil, fmt.Errorf("没有找到银行账户")
 	}
 	houseInfo.BankAccount = resMap[BankAccount].([]int)
-	
-	return houseInfo, nil	
+
+	return houseInfo, nil
 }
 
 func tenementInfo(id int, resChan chan Response, wg *sync.WaitGroup) {
-
 	defer wg.Done()
 
 	time.Sleep(time.Millisecond * 2000)
 
 	users := []string{"张三", "李四", "王五"}
-	
+
 	resChan <- Response{
 		map[string]any{
 			Owners: users,
@@ -99,7 +99,6 @@ func tenementInfo(id int, resChan chan Response, wg *sync.WaitGroup) {
 }
 
 func evaluateHouse(id int, resChan chan Response, wg *sync.WaitGroup) {
-
 	defer wg.Done()
 
 	time.Sleep(time.Millisecond * 2000)
@@ -113,7 +112,6 @@ func evaluateHouse(id int, resChan chan Response, wg *sync.WaitGroup) {
 }
 
 func loanInfo(id int, resChan chan Response, wg *sync.WaitGroup) {
-
 	defer wg.Done()
 
 	time.Sleep(time.Millisecond * 2000)

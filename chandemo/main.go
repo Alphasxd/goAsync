@@ -19,7 +19,7 @@ func asyncDoSomeBack(num int, resChan chan string) {
 }
 
 func main() { // 主协程
-	
+
 	// 1. 串行执行
 	start := time.Now()
 	for i := 0; i < 10; i++ {
